@@ -3,5 +3,112 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-  }
+    "FirstWebComponent": {
+      "projectType": "application",
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "scss"
+        },
+        "@schematics/angular:application": {
+          "strict": true
+        }
+      },
+      "root": "projects/first-web-component",
+      "sourceRoot": "projects/first-web-component/src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "ngx-build-plus:browser",
+          "options": {
+            "outputPath": "dist/first-web-component",
+            "index": "projects/first-web-component/src/index.html",
+            "main": "projects/first-web-component/src/main.ts",
+            "polyfills": "projects/first-web-component/src/polyfills.ts",
+            "tsConfig": "projects/first-web-component/tsconfig.app.json",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/first-web-component/src/favicon.ico",
+              "projects/first-web-component/src/assets"
+            ],
+            "scripts": [
+              {
+                "bundleName": "polyfill-webcomp-es5",
+                "input": "node_modules/@webcomponents/webcomponentsjs/custom-elements-es5-adapter.js"
+              },
+              {
+                "bundleName": "polyfill-webcomp",
+                "input": "node_modules/@webcomponents/webcomponentsjs/bundles/webcomponents-sd-ce-pf.js"
+              }
+            ]
+          },
+          "configurations": {
+            "production": {
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "500kb",
+                  "maximumError": "1mb"
+                },
+                {
+                  "type": "anyComponentStyle",
+                  "maximumWarning": "2kb",
+                  "maximumError": "4kb"
+                }
+              ],
+              "fileReplacements": [
+                {
+                  "replace": "projects/first-web-component/src/environments/environment.ts",
+                  "with": "projects/first-web-component/src/environments/environment.prod.ts"
+                }
+              ],
+              "outputHashing": "all"
+            },
+            "development": {
+              "buildOptimizer": false,
+              "optimization": false,
+              "vendorChunk": true,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "namedChunks": true
+            }
+          },
+          "defaultConfiguration": "production"
+        },
+        "serve": {
+          "builder": "ngx-build-plus:dev-server",
+          "configurations": {
+            "production": {
+              "browserTarget": "FirstWebComponent:build:production"
+            },
+            "development": {
+              "browserTarget": "FirstWebComponent:build:development"
+            }
+          },
+          "defaultConfiguration": "development"
+        },
+        "extract-i18n": {
+          "builder": "ngx-build-plus:extract-i18n",
+          "options": {
+            "browserTarget": "FirstWebComponent:build"
+          }
+        },
+        "test": {
+          "builder": "ngx-build-plus:karma",
+          "options": {
+            "main": "projects/first-web-component/src/test.ts",
+            "polyfills": "projects/first-web-component/src/polyfills.ts",
+            "tsConfig": "projects/first-web-component/tsconfig.spec.json",
+            "karmaConfig": "projects/first-web-component/karma.conf.js",
+            "inlineStyleLanguage": "scss",
+            "assets": [
+              "projects/first-web-component/src/favicon.ico",
+              "projects/first-web-component/src/assets"
+            ],
+            "scripts": []
+          }
+        }
+      }
+    }
+  },
+  "defaultProject": "FirstWebComponent"
 }
